@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>Absenties: wachtwoord wijzigen</title>
+  <link rel="stylesheet" href="%sschool.css" type="text/css" />
+<script language="JavaScript" type="text/JavaScript">%s</script>
+</head>
+<body>
+<!-- kop -->
+    <form action="%swijzig_user.py" method="post">
+        <div>Geef de volgende gegevens op</div>
+		<br />
+		<div>
+        <span style="width: 120px">Oud wachtwoord:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span><input id="tPwO" name="tPwO" type="password"/></span></div><br/>
+		<div><span style="width: 120px">Nieuw wachtwoord:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+        <span><input id="tPw" name="tPw" type="password"/></span></div><br/>
+		<div><span style="width: 120px">Nieuw wachtwoord<br/>nogmaals ter controle:&nbsp;&nbsp;</span>
+        <span><input id="tPw2" name="tPw2" type="password"/></span></div><br/>
+		<div><span style="width: 120px">&nbsp;</span>
+        <span>
+        <input type="hidden" name="tNaam" id="tNaam" value="%s"/>
+        <input type="hidden" name="hVan" id="hVan" value="%s"/>
+        <input type="hidden" name="wu1" id="wu1" />
+        <input type="hidden" name="wu2" id="wu2" />
+        <input type="submit" value="wijzigen"  onclick="check_npw();return document.MM_returnValue"/>
+        <input type="button" value="terug" onclick="history.go(-1)"/></span></div>
+	</form>
+  <hr />
+</body>
+</html>

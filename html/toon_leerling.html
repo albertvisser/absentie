@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="%sschool.css" type="text/css" />
+  <title>Absentie leerling</title>
+  <script type="text/javascript">%s</script>
+</head>
+<body>
+<!-- kop -->
+<form action="%swijzig_llabsent.py" id="fWijzig" name="fWijzig" method="post">
+<table border="0">
+  <tr>
+    <td>Naam:</td><td colspan="3">%s</td>
+  </tr>
+  <tr>
+    <td>Status absentie:</td>
+   <td>
+     <select name="selStat" id="selStat" onChange="isChanged()">
+       <option value="%s">%s</option>
+     </select>
+   </td>
+    <td style="text-align: right">&nbsp;&nbsp;Wijziging gaat in per:&nbsp;</td>
+    <td>
+     <select name="selDag" id="selDag" onChange="isDateOK()">
+     </select>&nbsp;-&nbsp;
+     <select name="selMnd" id="selMnd" onChange="isDateOK()">
+     </select>&nbsp;-&nbsp;
+     <select name="selJaar" id="selJaar" onChange="isDateOK()">
+     </select>
+   </td>
+  </tr>
+  <tr>
+    <td valign="top">Reden absentie:</td>
+   <td colspan="3">
+     <textarea name="txtReden" id="txtReden" cols="60" rows="2" onkeydown="isChanged()">%s</textarea>
+   </td>
+  </tr>
+  <tr>
+    <td>
+     <input type="hidden" name="hId" id="hId" value="%s" />
+     <input type="hidden" name="hVan" id="hVan" value="toon_llabsent" />
+     <input type="hidden" name="hTerug" id="hTerug" value="%s" />
+     <input type="hidden" name="wla1" id="wla1" />
+     <input type="hidden" name="wla2" id="wla2" />
+   </td>
+   <td colspan="3">
+     <input type="submit" id = "bWijz" value="Wijzigingen doorvoeren" disabled="disabled" onclick="check_llabs();return document.check_retval" />
+     <input type="button" id="bReset" value="ongedaan maken" disabled="disabled" onclick="isUnchanged()"/>
+   </td>
+  </tr>
+  <tr><td colspan="4" class="red">%s</td></tr>
+</table>
+</form>
+<!-- AbsentHist -->
+<br />
+<br />
+</body>
+</html>

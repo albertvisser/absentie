@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>Absenties</title>
+  <link rel="stylesheet" href="school.css" type="text/css" />
+</head>
+<body>
+  <a name="top">
+  </a>
+  <p>
+    <img align="left" src="mylogo3.gif" alt="[Python Powered]" title="info over deze site/applicatie" border="0" />
+    <a href="http://www.mheen.apeldoorn-onderwijs.nl/homepage.htm">
+    <img align="right" src="mheenlogo.gif" alt="Mheenlogo" title="logo van de mheen" border="0" />
+    </a>
+  </p>
+  <hr />
+  <span class="big">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Over...</span>
+  <hr /><br/>
+<div>
+<span class="half" style="text-align: left">&nbsp;</span>
+<span class="half" style="text-align: right">
+<input type="button" value="Terug" onclick="history.go(-1)" />
+</span>
+</div>
+<div>
+<span class="big">Over deze applicatie</span><br />
+Centraal in deze applicatie staat de mogelijkheid om een leerling absent of aanwezig te melden. Dat kan op twee manieren: vanaf een scherm waarin een selectie van leerlingen getoond wordt (alle leerlingen uit een klas, leerlingen met een bepaalde naam, alle absente leerlingen) en vanaf een scherm waarin de huidige "status" van een leerling getoond wordt met een overzicht van eerdere absent- en aanwezigmeldingen. Dit scherm biedt ook de mogelijkheid om een opmerking (bv. een bijzondere reden) toe te voegen. Dit scherm wordt bereikt vian een selectiescherm, omdat eerst moet worden bepaald om welke leerling het gaat - maar wanneer een selectie maar één leerling oplevert, wordt het selectiescherm overgeslagen.<br/>
+Daarnaast bevat de applicatie een aantal schermen waarin de tabellen die de basis vormen (leerkrachten, leerlingen, groepen, gebruikers) bekeken en gewijzigd kunnen worden. Dit kan alleen maar gedaan worden door gebruikers met systeembeheer-autorisatie. Om te beginnen is er één gebruiker aanwezig, deze heet "leerkracht" en heeft als wachtwoord "begin". Wanneer een nieuwe gebruiker wordt opgevoerd krijgt deze om te beginnen ook dit wachtwoord. In gebruikersnamen en wachtwoorden wordt onderscheid gemaakt tussen hoofd- en kleine letters. Voorlopig kan een wachtwoord alleen via de gebruikersadministratie gewijzigd worden.<br/>
+Van de genoemde vier tabellen zijn de eerste drie ontleend aan/overgenomen uit de Edex-systematiek. Voor de absentie-administratie is een extra tabel toegevoegd, voor deze is geen administratie-scherm toegevoegd, omdat het andere deel van de applicatie daarvoor bedoeld is. <br/><br/>
+Dit projectje is gestart vanuit het idee om de papieren administratie hierover te vervangen en vooral om het op meer plekken bijhouden en het aan elkaar doorgeven van informatie hierover overbodig te maken.<br/>
+Ik heb hier een web-based applicatie van gemaakt omdat zo een een stuk makkelijker in een netwerk in te richten is dan een "standaard" toepassing met eigen schermpjes en zo.<br/>
+Die moet je namelijk op alle aan te sluiten computers installeren terwijl deze gewoon gebruik maakt van wat er toch al staat (een web-browser) en de programmatuur alleen maar op de web-server geïnstalleerd hoeft te worden.<br/>
+</div>
+<hr />
+<div>
+<span class="big">Over deze site</span><br />
+Deze site is ontwikkeld om in willekeurig welke browser gebruikt te worden (getest met Opera 7.5 en Internet Explorer 6). Aan de browserkant wordt html/xhtml gebruikt met een beetje Javascript vanwege het gebruik van cookies om het login vast te houden, en wat syntaxcontrole voordat de informatie naar de server gestuurd wordt. De programmatuur aan de serverkant is geschreven in Python en maakt gebruik van data-opslag in tekstformaat (export van de oorspronkelijke EDEX-bestanden) en XML (de zelf ontworpen toevoegingen).
+</div>
+<hr />
+<div>
+<span class="big">Over de auteur</span><br />
+Al zo'n 15 jaar werk ik als ontwikkelaar (ontwerper en bouwer) van programmatuur voor administratieve doelen, in COBOL op mainframe-computers. Een paar jaar geleden werd ik verliefd op de programmeertaal Python waar ik ook op de  PC flink mee te keer kon gaan, en maakte ik kennis met XML, een "taal" om gegevens in te beschrijven.<br/>
+Op het werk kwam het begrip "web-based applicatie" in de mode, aan mij de uitdaging om te laten zien dat ik zoiets ook kon maken. Alleen nog een nuttige toepassing vinden... dat werd dit dus.
+</div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="%sschool.css" type="text/css" />
+  <title>Lijst leerkrachten</title>
+  <script type="text/javascript">%s</script>
+</head>
+<body>
+<!-- kop -->
+<!--
+In dit scherm kunnen de gegevens van de leerkrachten bijgewerkt worden. Het is een multi-regel scherm
+zoals ook bij adressen in gebruik, en hierin zitten alleen de velden uit het edex-bestand:
+0-39 achternaam 40-49 voorvoegsel 50-69 voornaam
+70-74 sleutel (automatisch gegeven) 75-78 ? 79 ?
+Voor wijzigen van andere gegevens kan een keuze "detail" naar een scherm gaan waar per leerkracht
+allerlei andere administraties worden bijgehouden
+-->
+<form action="%stoon_leerkrachten.py" method="post">
+<input type="hidden" name="tlk1" id="tlk1" />
+<input type="hidden" name="edit" id="edit" />
+<input type="hidden" name="tlk2" id="tlk2" />
+    <table width="100%" border="1">
+        <tr>
+            <th width="50%">Naam</th>
+            <th width="40%" title="Laat zien welke groepen bij deze leerkracht horen; kan alleen op het 'Groepen' scherm gewijzigd worden">Groepen</th>
+            <th width="10%"><input type="submit" value="Nieuw" onclick="%s"/></th>
+        </tr>
+<!-- contents -->
+</table>
+</form>
+</body>
+</html>

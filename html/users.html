@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="%sschool.css" type="text/css" />
+  <title>Lijst groepen</title>
+  <script type="text/javascript">%s</script>
+</head>
+<body>
+<!-- kop -->
+<!--
+In dit scherm kunnen de gegevens van de gebruikers bijgewerkt worden.
+Het is een multi-regel scherm zoals ook bij adressen in gebruik.
+Op dit scherm is een veld toegevoegd dat nog niet in het xml bestand zit (geblokkeerd)
+en het veld wachtwoord wordt niet getoond, dat is te wijzigen via een
+apart scherm (ook te gebruiken vanaf login scherm of zo)
+of komt in de plaats van de 'ingelogd' rubriek
+-->
+<form action="%stoon_users.py" method="post">
+<input type="hidden" name="tu1" id="tu1" />
+<input type="hidden" name="edit" id="edit" />
+<input type="hidden" name="tu2" id="tu2" />
+  <table width="100%" border="1">
+    <tr>
+      <th width="15%">Naam</th>
+      <th width="10%" title="'Gewone' gebruikers kunnen geen (andere) gebruiker beheren">Accesstype</th>
+      <th width="10%" title="Toont welk scherm een gebruiker als eerste te zien krijgt">Start op scherm</th>
+      <th width="10%" title="Bij toon_klas: key van de leerkracht; bij sel_leerling: key van de leerling">Zoekargument</th>
+      <th width="10%" title="Toont of een gebruiker het systeem in mag">Geblokkeerd</th>
+      <th width="15%" title="Laat zien wanneer een gebruiker voor het laatst aanlogde">Laatst ingelogd</th>
+      <th width="10%"><input type="submit" value="Nieuw" onclick="%s"></th>
+    </tr>
+<!-- contents -->
+<!-- extra knop naar wijzig wachtwoord schermpje -->
+</table>
+</form>
+</body>
+</html>

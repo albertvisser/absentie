@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="%sschool.css" type="text/css" />
+  <title>Lijst leerlingen</title>
+  <script type="text/javascript">%s</script>
+</head>
+<body>
+<!-- kop -->
+<!--
+In dit scherm kunnen de gegevens van de leerlingen bijgewerkt worden. Het is een multi-regel scherm
+zoals ook bij adressen in gebruik, en hierin zitten alleen de velden uit het edex-bestand:
+0-39 achternaam 40-49 voorvoegsel 50-69 voornaam 70-77 gebdatum 78 geslacht 79 autochtonie
+80-84 leerling-id (automatisch gegeven)
+85-89 groep-id (onderhouden bij koppelen leerling aan groep, maar kan ook hier gewijzigd worden?)
+90-98 jaren ("versie"van het edex bestand).
+Voor wijzigen van andere gegevens kan een keuze "detail" naar een scherm gaan waar per leerling
+allerlei andere administraties worden bijgehouden
+-->
+<form action="%stoon_leerlingen.py" method="post">
+<input type="hidden" name="tll1" id="tll1" />
+<input type="hidden" name="edit" id="edit" />
+<input type="hidden" name="tll2" id="tll2" />
+  <table width="100%" border="1">
+    <tr>
+      <th width="50%">Naam</th>
+      <th width="20%">Geboortedatum</th>
+      <th width="10%">Geslacht</th>
+<!--      <th width="15%">Oorsprong</th> -->
+      <th width="10%">Groep</th>
+      <th width="10%"><input type="submit" value="Nieuw" onclick="%s"></th>
+    </tr>
+<!-- contents -->
+</table>
+</form>
+</body>
+</html>

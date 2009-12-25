@@ -1,0 +1,98 @@
+body {
+/* font:12px/1.2 Verdana, Arial, Helvetica, sans-serif; */
+font-family: Verdana, Arial, Helvetica, sans-serif; 
+font-size:small;
+background:#f0e8dc;
+padding:0px;
+margin:10px;
+}
+
+a {
+text-decoration:none;
+font-weight:bold;
+color:#c00;
+}
+form { display: inline }
+pre {
+font-size:11px;
+color:blue;
+}
+th {
+        border: 0;
+}
+.center {
+        text-align: center
+}
+.hl {
+        background-color: #c0c0c0
+}
+.greek {
+color:#999;
+}
+.small {
+	font-size: small ;
+}
+.uname {
+       color: maroon;
+       font-weight: bold
+}
+.big {
+	font-size: x-large ;
+}
+.red {
+	color: red
+}
+.green {
+	color: green
+}
+label.small {
+width: 50;
+}
+label.medium {
+width: 110;
+}
+
+ol {
+margin-right:40px;
+}
+li {
+margin-bottom:10px;
+}
+.nobul {
+list-style-type: none ;
+}
+div.wide {
+width: 800px;
+}
+span.left {
+float: left;
+width: 10%;
+}
+span.right {
+float: left;
+width: 90%;
+}
+span.mid {
+float: left;
+width: 45%;
+}
+span.half {
+float: left;
+width: 50%;
+}
+span.left2 {
+float: left;
+width: 14%;
+}
+span.right2 {
+float: left;
+width: 86%;
+}
+span.left3 {
+float: left;
+width: 18%;
+}
+span.right3 {
+float: left;
+width: 82%;
+}

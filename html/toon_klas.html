@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="%sschool.css" type="text/css" />
+  <title>Leerlingenlijst</title>
+  <script type="text/javascript">%s</script>
+</head>
+<body>
+<!-- kop -->
+  <div>
+    <form action="%ssel_leerling.py" method="post">
+    Zoek een leerling op (deel van) voor- of achternaam:
+    <input id="txtZoek" name="txtZoek" size="40" type="text" />
+    <input type="hidden" name="hVan" id="hVan" value="toon_klas-%s" />
+    <input type="hidden" name="sl1" id = "sl1"/>
+    <input type="hidden" name="sl2" id = "sl2"/>
+    <input type="submit" value="Zoek" onclick="doit_sel('txtZoek','sl1','sl2');return doit_retval;"/>
+<!--     <input type="button" value="Terug" onclick="javascript:history.go(-1)"/> -->
+    </form>
+  </div><br />
+  <table width="100%" border="1">
+    <tr>
+      <th width="30%">Naam</th>
+      <th width="10%">Groep</th>
+      <th width="30%">Status</th>
+      <th>Sinds</th>
+      <th width="10%">&nbsp;</th>
+    </tr>
+    <!-- contents -->
+  </table>
+</body>
+</html>

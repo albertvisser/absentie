@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>Absenties start</title>
+  <link rel="stylesheet" href="%sschool.css" type="text/css" />
+  <script type="text/javascript">%s</script>
+</head>
+<body>
+<!-- kop -->
+  <h3>Maak een keuze:</h3>
+  <ul class="nobul">
+  <br />
+  <li>
+    <form action="%stoon_klas.py" method="post">
+        <input type="hidden" name="tk1" id = "tk1"/>
+        <input type="hidden" name="tk2" id = "tk2"/>
+        <input type="submit" value="Toon" onclick="doit('tk1','tk2')"/>&nbsp; de leerlingen uit de groep van:
+        <select name="selKlas" id="">
+            <option value="%s">%s</option>
+        </select>
+   </form>
+  </li>
+  <br />
+  <li>
+    <form action="%ssel_leerling.py" method="post">
+        <input type="hidden" name="sl1" id = "sl1"/>
+        <input type="hidden" name="sl2" id = "sl2"/>
+        <input type="submit" value="Zoek" onclick="doit_sel('txtZoek','sl1','sl2');return doit_retval;"/>&nbsp; een leerling op (deel van) voor- of achternaam:
+        <input type="hidden" name="hVan" id="hVan" value="start" />
+        <input id="txtZoek" name="txtZoek" size="40" type="text" />
+    </form>
+  </li>
+  <br />
+  <li>
+    <form action="%stoon_absent.py" method="post">
+        <input type="hidden" name="ta1" id = "ta1"/>
+        <input type="hidden" name="ta2" id = "ta2"/>
+        <input type="submit" value="Toon alle absenten" onclick="doit('ta1','ta2')"/>
+    </form>
+  </li>
+  </ul>
+  <br /><br />
+  <hr />
+  <br />Tabellenbeheer:<br />
+    <ul class="nobul">
+<!--
+    <li>
+      <form action="%sdummy.py" method="post">
+        <input type="hidden" name="tti1" id = "tti1"/>
+        <input type="hidden" name="tti2" id = "tti2"/>
+        <input type="submit" value="Tabellen importeren" disabled="disabled" onclick="doit('tti1','tti2')" title="Deze mogelijkheid is bedoeld om het apart bijhouden van leerkrachten- en groepen-tabel in principe overbodig te maken en het bijhouden van de leerlingentabel alleen nodig voor tussentijdse mutaties. Alleen... het neerzetten van nieuwe bestanden in de server-data omgeving moet je volgens mij helemaal niet vanaf hier willen aansturen"/>
+      </form>
+    </li>
+-->
+    <li>
+      <form action="%stoon_leerkrachten.py" method="post">
+        <input type="hidden" name="tlk1" id = "tlk1"/>
+        <input type="hidden" name="tlk2" id = "tlk2"/>
+        <input type="submit" value="Leerkrachten" onclick="doit('tlk1','tlk2')"/>
+      </form>
+    </li>
+    <li>
+      <form action="%stoon_leerlingen.py" method="post">
+        <input type="hidden" name="tll1" id = "tll1"/>
+        <input type="hidden" name="tll2" id = "tll2"/>
+        <input type="submit" value="Leerlingen" onclick="doit('tll1','tll2')"/>
+      </form>
+    </li>
+    <li>
+      <form action="%stoon_groepen.py" method="post">
+        <input type="hidden" name="tgr1" id = "tgr1"/>
+        <input type="hidden" name="tgr2" id = "tgr2"/>
+        <input type="submit" value="Groepen" onclick="doit('tgr1','tgr2')"/>
+      </form>
+    </li>
+    <li>
+      <form action="%stoon_users.py" method="post">
+        <input type="hidden" name="tu1" id = "tu1"/>
+        <input type="hidden" name="tu2" id = "tu2"/>
+        <input type="%s" value="Gebruikers" onclick="doit('tu1','tu2')"/>
+      </form>
+    </li>
+    </ul>
+    <br />
+  <hr />
+</body>
+</html>
