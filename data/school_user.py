@@ -1,3 +1,5 @@
+import os
+import shutil
 from globals import xmlpad
 from xml.sax import make_parser
 from xml.sax.handler import feature_namespaces
@@ -5,6 +7,20 @@ from xml.sax import saxutils
 from xml.sax import ContentHandler
 from xml.sax.saxutils import XMLGenerator
 from xml.sax.saxutils import escape
+userfile = os.path.join(xmlpad, 'users.xml')
+backup = '_oud'.join(os.path.splitext(userfile))
+
+def _mangle(timestamp):
+    i = timestamp
+    retval = i[0] + i[2] + i[5] + i[9] + i[15] + i[18]+ i[17] + i[14]
+    retval = retval + i[11] + i[6] + i[1] + i[3] + i[8] + i[12]
+    return retval
+
+def _unmangle(sessionid):
+    i = sessionid
+    retval = i[0] + i[10] + i[1] + i[11] + "/" + i[2] + i[9] + "/" + i[12] + i[3]
+    retval = retval + "-" + i[8] + i[13] + ":" + i[7] + i[4] + ":" + i[6] + i[5]
+    return retval
 
 class FindUser(ContentHandler):
     "bevat de gegevens van een bepaalde user"
@@ -40,7 +56,7 @@ class UpdateUser(XMLGenerator):
         self.fh = open(self.uh.fn,'w')
         self.founditem = False
         self.itemfound = False
-        XMLGenerator.__init__(self,self.fh)
+        XMLGenerator.__init__(self, self.fh)
         self.utype = 'usr'
         self.blck = 'N'
         self.start = 'start'
@@ -57,18 +73,18 @@ class UpdateUser(XMLGenerator):
                     self.password = attrs.get('paswd',None)
                 else:
                     self.password = self.uh.paswd
-                if self.uh.utype == "":
+                if self.uh.usertype == "":
                     self.utype = attrs.get('type',None)
                 else:
-                    self.utype = self.uh.utype
+                    self.utype = self.uh.usertype
                 if self.uh.login == "":
                     self.login = attrs.get('login',None)
                 else:
                     self.login = self.uh.login
-                if self.uh.blck == "":
+                if self.uh.blocked == "":
                     self.blck = attrs.get('blok',None)
                 else:
-                    self.blck = self.uh.blck
+                    self.blck = 'J' if self.uh.blocked else 'N'
                 if self.uh.start == "":
                     self.start = attrs.get('start',None)
                 else:
@@ -79,7 +95,7 @@ class UpdateUser(XMLGenerator):
                 self._out.write('<' + name)
                 self.username = self.uh.userid
                 self.login = self.uh.login
-                for (name,value) in attrs.items():
+                for (name, value) in attrs.items():
                     h = value
                     if name == 'id':
                         if value != self.username:
@@ -118,10 +134,11 @@ class UpdateUser(XMLGenerator):
                 if not self.itemfound:
                     self._out.write('<user')
                     self._out.write(' id="%s"' % escape(self.uh.userid))
-                    self._out.write(' type="%s"' % escape(self.uh.utype))
+                    self._out.write(' type="%s"' % escape(self.uh.usertype))
                     self._out.write(' paswd="%s"' % escape(self.uh.paswd))
                     self._out.write(' login="%s"' % escape(self.uh.login))
-                    self._out.write(' blok="%s"' % escape(self.uh.blck))
+                    blck = 'J' if self.uh.blocked else 'N'
+                    self._out.write(' blok="%s"' % blck)
                     self._out.write(' start="%s"' % escape(self.uh.start))
                     self._out.write('></user>')
             XMLGenerator.endElement(self, name)
@@ -133,7 +150,7 @@ class UpdateUser(XMLGenerator):
 
 class ListUsers(ContentHandler):
     def __init__(self):
-        self.Items = []
+        self.items = []
 
     def startElement(self, name, attrs):
         if name == 'user':
@@ -142,63 +159,52 @@ class ListUsers(ContentHandler):
             utype = attrs.get('type', '')
             blck = attrs.get('blok', '')
             start = attrs.get('start', '')
-            self.Items.append([user,login,utype,blck,start])
+            self.items.append((user, login, utype, blck, start))
 
-class UserLijst:
+def userlijst():
     "lijst met gegevens van alle users:"
     "resp. naam, login, autorisatieniveau, blokkade"
-    def __init__(self):
-        self.fn = xmlpad + 'users.xml'
-        self.fno = xmlpad + 'users_oud.xml'
-        self.Items = []
-        parser = make_parser()
-        parser.setFeature(feature_namespaces, 0)
-        dh = ListUsers()
-        parser.setContentHandler(dh)
-        parser.parse(self.fn)
-        for x in dh.Items:
-            h = []
-            for y in x:
-                h.append(y.encode('ISO-8859-1'))
-            self.Items.append(h)
+    items = []
+    parser = make_parser()
+    parser.setFeature(feature_namespaces, 0)
+    dh = ListUsers()
+    parser.setContentHandler(dh)
+    parser.parse(userfile)
+    for x in dh.items:
+        items.append([y.encode('ISO-8859-1') for y in x])
+    return items
 
 class User:
-    "gegevens van een bepaalde user"
-    "a. alleen usernaam gegeven: read-opdracht moet expliciet volgen"
-    "b. usernaam en password: doe een logon met een impliciete read"
-    "   als het password ok is overige gegevens ophalen"
-    "c. usernaam en sessie: doe een read en controleer de sessie"
-    "   als het ok is de overige gegevens ophalen"
-    def __init__(self,userid,paswd="",isSesId=False): # user aanmaken
-        self.fn = xmlpad + 'users.xml'
-        self.fno = xmlpad + 'users_oud.xml'
+    """gegevens van een bepaalde user
+
+    a. alleen usernaam gegeven: read-opdracht moet expliciet volgen
+    b. usernaam en password: doe een logon met een impliciete read
+       als het password ok is overige gegevens ophalen
+    c. usernaam en sessie: doe een read en controleer de sessie
+       als het ok is de overige gegevens ophalen
+    """
+    def __init__(self, userid, paswd="",is_sessionid=False): # user aanmaken
+        self.fn = userfile
+        self.fno = backup
         self.userid = userid
         self.paswd = ''
         self.paswdok = False
-        self.SessionOk = False
+        self.session_ok = False
         self.login = ""
-        self.utype = ''
+        self.usertype = ''
         self.geblokkeerd = False
-        self.blck = 'N'
+        self.blocked = False
         self.start = 'start'
-#        self.xtypes = ['adm','usr','prt','vwr']
-        self.xtypes = ['adm','usr']
-        self.btypes = ['J','N']
-        self.snames = ['start','toon_klas','sel_leerling','toon_absent']
+        self.access_types = ('adm', 'usr') # ,'prt, 'vwr')
+        self.start_names = ('start', 'toon_klas', 'sel_leerling', 'toon_absent')
 
         if paswd != '':
-            if isSesId:
-                dh = self.read()
+            if is_sessionid:
+                self.read()
                 if self.found:
-                    self.SessionOk = self.checkSession(paswd,dh.login)
+                    self.session_ok = self.check_session(paswd, self.login)
             else:
-                dh = self.logon(paswd)
-            if self.SessionOk or self.paswdok:
-                self.login = dh.login
-                self.utype = dh.utype
-                self.blck = dh.blck
-                self.start = dh.start
-            dh = ''
+                self.logon(paswd)
 
     def read(self):
         parser = make_parser()
@@ -207,9 +213,14 @@ class User:
         parser.setContentHandler(dh)
         parser.parse(self.fn)
         self.found = dh.userfound
+        if self.found:
+            self.login = dh.login
+            self.usertype = dh.utype
+            self.blocked = True if dh.blck == 'J' else False
+            self.start = dh.start
         return dh
 
-    def logon(self,value):
+    def logon(self, value):
         dh = self.read()
         if self.found:
             if value == dh.password:
@@ -217,91 +228,77 @@ class User:
             else:
                 self.loginerr += 1
                 if self.loginerr > 3:
-                    self.setBlok("J")
-        return dh
+                    self.blocked = True
 
-    def setPass(self,value):
+    def set_pass(self,value):
         "wijzigen van het wachtwoord"
         self.paswd = value
         self.write()
         self.paswd = ''
 
-    def getPass(self):
+    def get_pass(self):
         dh = self.read()
         if self.found:
             self.paswd = dh.password
 
-    def setType(self,value):
+    def set_type(self,value):
         try:
-            h = self.xtypes.index(value)
+            h = self.access_types.index(value)
         except:
             return False
         else:
-            self.utype = value
+            self.usertype = value
             self.write()
             return True
 
-    def setStart(self,value):
-        try:
-            h = self.snames.index(value)
-        except:
+    def set_start(self,value):
+        if value not in self.start_names.index(value):
             return False
-        else:
-            self.start = value.upper()
-            self.write()
-            return True
+        self.start = value.lower()
+        self.write()
+        return True
 
-    def setBlok(self,value):
-        try:
-            h = self.btypes.index(value)
-        except:
+    def block(self, value=True):
+        if value not in self.blocked_types:
             return False
-        else:
-            self.blck = value.upper()
-            self.write()
-            return True
+        self.blocked = value
+        self.write()
+        return True
 
-    def getAttr(self,name):
+    def get_attr(self,name):
         if name == 'type':
-            return self.utype
+            return self.usertype
         elif name == 'start':
             return self.start
         elif name == 'blok':
-            return self.blck
-        else:
-            return False
+            return self.blocked
 
-    def getLevel(self):
+    def get_level(self):
         "vertaal access-level in een volgnummer"
         try:
-            h = self.xtypes.index(self.utype)
-        except:
+            h = self.access_types.index(self.usertype)
+        except ValueError:
             return 0
         else:
             return h + 1
 
-    def startSession(self):
+    def start_session(self):
         "aangeven dat de gebruiker aangelogd is"
         from time import gmtime, strftime
-        i = strftime("%Y/%m/%d-%H:%M:%S")
-        self.login = i
-        sessionid = i[0] + i[2] + i[5] + i[9] + i[15] + i[18]+ i[17] + i[14] + i[11] + i[6] + i[1] + i[3] + i[8] + i[12]
+        self.login = strftime("%Y/%m/%d-%H:%M:%S")
+        sessionid = _mangle(self.login)
         self.write()
         return sessionid
 
-    def checkSession(self,sessionid,login):
+    def check_session(self, sessionid, login):
         "sessionid controleren"
-        i = sessionid
-        if len(i) == 14:
-            dts = i[0] + i[10] + i[1] + i[11] + "/" + i[2] + i[9] + "/" + i[12] + i[3] + "-" + i[8] + i[13] + ":" + i[7] + i[4] + ":" + i[6] + i[5]
-            try:
-                if dts == login:
-                    return True
-            except:
-                pass
+        if len(sessionid) == 14:
+            dts = _unmangle(sessionid)
+            if dts == login:
+                return True
         return False
 
-    def endSession(self):
+    def end_session(self):
         "aangeven dat de gebruiker niet (meer) aangelogd is"
         self.login = ""
         try:
@@ -319,108 +316,11 @@ class User:
         #~ elif self.paswd == '':
             #~ retval = 4
         if retval == 0:
-            from shutil import copyfile
-            from os import remove
-            copyfile(self.fn,self.fno)
-            remove(self.fn)
+            shutil.copyfile(self.fn, self.fno)
+            os.remove(self.fn)
             parser = make_parser()
             parser.setFeature(feature_namespaces, 0)
             dh = UpdateUser(self)
             parser.setContentHandler(dh)
             parser.parse(self.fno)
         return retval
-
-def test():
-    #~ dh = User('woefdram')
-    #~ dh.read()
-    #~ if dh.found:
-        #~ print dh.__dict__
-    #~ else:
-        #~ print "user not found"
-    #~ dh = User('vader',"begin")
-    #~ if dh.paswdok:
-        #~ print dh.__dict__
-    #~ else:
-        #~ print "password not ok"
-    #~ return
-    #~ dh = User('vader',"20015533280430",True)
-    #~ print dh.SessionOk
-    #~ print dh.blck
-    #~ print dh.xtypes
-    #~ print dh.getLevel()
-    #~ return
-    #~ dh = User('woefdram','magiokis')
-    #~ s = dh.startSession()
-    #~ xslevel = dh.getLevel
-    # defining a user, starting out with username only
-    #~ dh = User('Brian')
-    #~ dh.read()
-    #~ if dh.found:
-        #~ dh.setPass('life')
-        #~ if not dh.setType('user'):
-            #~ print "type moet 'adm' of 'usr' zijn"
-        #~ dh.logon('life')
-        #~ if dh.paswdok:
-            #~ print "found user, password ok"
-        #~ else:
-            #~ print "found user, password wrong"
-    #~ else:
-        #~ print "user not found, adding new one (I hope)"
-        #~ dh.utype = '1'
-        #~ dh.blck = 'N'
-        #~ dh.start = 'toon_klas:Brian'
-        #~ h = dh.write()
-    #~ return
-    # defining a user from userid and password
-    #~ dh = User('Brian','life')
-    #~ if dh.found:
-        #~ if dh.paswdok:
-            #~ print "found user, password ok"
-        #~ else:
-            #~ print "found user, password wrong"
-    #~ else:
-        #~ print "user not found, adding new one (I hope)"
-    dh = UserLijst()
-    for x in dh.Items:
-        print x
-    #~ return
-    #-- testen password aanpassen
-    #~ if dh.paswdok:
-        #~ print dh.userid,dh.paswd,dh.login
-        #~ print "password ophalen"
-        #~ dh.getPass()
-        #~ print dh.userid,dh.paswd,dh.login
-        #~ print "password wijzigen"
-        #~ dh.setPass("magiokis")
-    #--- testen start / check / end Session
-    #~ s = dh.startSession()
-    #~ print "sessie gestart met id:", s
-    #~ dh = User('Brian', 'life')
-    #~ print dh.__dict__
-    #~ dh = User('Brian','20062043280412',True)
-    #~ print dh.__dict__
-    #~ s = '20032123280410'
-    #~ h = dh.checkSession(s)
-    #~ if h:
-        #~ print "...en de sessie loopt"
-    #~ else:
-        #~ print "sessie-id",s,"klopt niet"
-    #~ dh = User('woefdram','20032123280410',True)
-    #~ if dh.SessionOk:
-        #~ print "...en de sessie loopt"
-    #~ else:
-        #~ print "sessie-id",s,"klopt niet"
-    #~ s = "hallo hallo hallo hallo"
-    #~ h = dh.checkSession(s)
-    #~ if h:
-        #~ print "...en de sessie loopt"
-    #~ else:
-        #~ print "sessie-id",s,"klopt niet"
-    #~ dh = User('woefdram', 'magiokis')
-    #~ if dh.endSession():
-        #~ print "sessie succesvol afgesloten"
-    #~ dh = User('woefdram', 'magiokis')
-    #~ print dh.userid,dh.paswd,dh.login
-
-if __name__ == '__main__':
-	test()

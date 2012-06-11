@@ -1,6 +1,6 @@
 body {
 /* font:12px/1.2 Verdana, Arial, Helvetica, sans-serif; */
-font-family: Verdana, Arial, Helvetica, sans-serif; 
+font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size:small;
 background:#f0e8dc;
 padding:0px;
@@ -46,10 +46,10 @@ color:#999;
 	color: green
 }
 label.small {
-width: 50;
+width: 50px;
 }
 label.medium {
-width: 110;
+width: 110px;
 }
 
 ol {

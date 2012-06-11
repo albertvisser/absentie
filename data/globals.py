@@ -1,2 +1,2 @@
-xmlpad = "f:/pythoneer/absentie/data/"
+xmlpad = "/home/albert/pythoneer/absentie/data/"
 filepad = xmlpad
