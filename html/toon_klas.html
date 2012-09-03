@@ -13,10 +13,11 @@
     <form action="%ssel_leerling.py" method="post">
     Zoek een leerling op (deel van) voor- of achternaam:
     <input id="txtZoek" name="txtZoek" size="40" type="text" />
-    <input type="hidden" name="hVan" id="hVan" value="toon_klas-%s" />
+    <input type="hidden" name="hVan" id="hVan" value="%s" />
     <input type="hidden" name="sl1" id = "sl1"/>
     <input type="hidden" name="sl2" id = "sl2"/>
     <input type="submit" value="Zoek" onclick="doit_sel('txtZoek','sl1','sl2');return doit_retval;"/>
+    <input type="checkbox" name="chkAbs" id="chkAbs" %s/>alleen absenten
 <!--     <input type="button" value="Terug" onclick="javascript:history.go(-1)"/> -->
     </form>
   </div><br />

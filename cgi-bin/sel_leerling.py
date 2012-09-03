@@ -14,9 +14,10 @@ def main():
     xslevel, meld = shared.check_session(u, s)
     if not meld:
         zoek = form.getfirst("txtZoek", None)
-        if zoek is not None:
+        absent = form.getfirst('chkAbs', False)
+        if zoek is not None or absent:
             vandaan = form.getfirst("hVan", "start")
-            h = SelectLeerling(zoek, vandaan, u, s, xslevel)
+            h = SelectLeerling(zoek, vandaan, u, s, xslevel, absent)
         else:
             meld = "Geen zoekstring opgegeven"
     if meld:

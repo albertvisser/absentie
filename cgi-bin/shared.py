@@ -1,11 +1,42 @@
 import sys
 import os
+import cgi
 sys.path.append("/home/albert/pythoneer/absentie") # waar de eigenlijke programmatuur staat
 from user_main import check_login
 from common import httppad, cgipad, printkop
 wwwroot = '/home/albert/www/'
 filepad = wwwroot + 'pythoneer/absentie'
 cgifilepad = wwwroot + "cgi-bin/absentie"
+
+def showkeys(form):
+    print "Content-Type: text/html"     # HTML is following
+    print                               # blank line, end of headers
+    print "<html>"
+    print "<head></head>"
+    print "<body>"
+    keys = form.keys()
+    keys.sort()
+    print
+    print "<H3>Form Contents:</H3>"
+    if not keys:
+        print "<P>No form fields."
+    print "<DL>"
+    for key in keys:
+        print "<DT>" + cgi.escape(key) + ":",
+        value = form[key]
+        print "<i>" + cgi.escape(`type(value)`) + "</i>"
+        print "<DD>" + cgi.escape(`value`)
+    print "</DL>"
+    print
+    print "</body></html>"
+
+def showargs(args):
+    print '<html><head></head><body>'
+    keys = args.keys()
+    keys.sort()
+    for key in keys:
+        print('{}: {}<br/>'.format(key, args[key]))
+    print '</body></html>'
 
 def check_session(uid, pwd):
     if uid and pwd:

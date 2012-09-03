@@ -8,6 +8,8 @@ from absentie_main import ToonAbsentie, WijzigAbsentie
 def main():
     form = cgi.FieldStorage()
     form_ok = False
+    ## shared.showkeys(form)
+    ## return
     u = ''
     s = ''
     for k in form.keys():
@@ -36,8 +38,20 @@ def main():
             if len(newmnd) == 1:
                 newmnd = "0" + newmnd
             newdat = newjaar + newmnd + newdag
+            enddag = form.getfirst("eindDag", "")
+            endmnd = form.getfirst("eindMnd", "")
+            endjaar = form.getfirst("eindJaar", "")
+            if enddag == '0' or endmnd == '0' or endjaar == '0':
+                enddat = ''
+            else:
+                if len(enddag) == 1:
+                    enddag = "0" + enddag
+                if len(endmnd) == 1:
+                    endmnd = "0" + endmnd
+                enddat = endjaar + endmnd + enddag
+
             h = WijzigAbsentie(sel_id, newstat, reden, komtvan, u, s,
-                kwamvan, newdat)
+                kwamvan, newdat, enddat)
     print "Content-Type: text/html"     # HTML is following
     print
     for x in h.regels:
