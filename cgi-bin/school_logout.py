@@ -1,4 +1,6 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import cgi
 import cgitb
 cgitb.enable()
@@ -15,10 +17,9 @@ def main():
         l = shared.MeldFout("Er is iets misgegaan", meld)
     else:
         l = Logout(u, s)
-    print "Content-Type: text/html"     # HTML is following
-    print                               # blank line, end of headers
+    print("Content-Type: text/html\n")     # HTML is following
     for x in l.regels:
-        print x
+        print(x)
 
 if __name__ == '__main__':
 	main()

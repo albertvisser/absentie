@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import sys
 import os
 import cgi
@@ -9,34 +11,27 @@ filepad = wwwroot + 'pythoneer/absentie'
 cgifilepad = wwwroot + "cgi-bin/absentie"
 
 def showkeys(form):
-    print "Content-Type: text/html"     # HTML is following
-    print                               # blank line, end of headers
-    print "<html>"
-    print "<head></head>"
-    print "<body>"
+    print("Content-Type: text/html\n")     # HTML is following
+    print("<html><head></head><body>")
     keys = form.keys()
     keys.sort()
-    print
-    print "<H3>Form Contents:</H3>"
+    print("<h3>form contents:</h3>")
     if not keys:
-        print "<P>No form fields."
-    print "<DL>"
+        print("<P>No form fields.")
+    print("<dl>")
     for key in keys:
-        print "<DT>" + cgi.escape(key) + ":",
         value = form[key]
-        print "<i>" + cgi.escape(`type(value)`) + "</i>"
-        print "<DD>" + cgi.escape(`value`)
-    print "</DL>"
-    print
-    print "</body></html>"
+        print("<dt>{}: <i>{}</i>".format(cgi.escape(key), cgi.escape(str(type(value)))))
+        print("<dd>" + cgi.escape(str(value)))
+    print("</dl></body></html>")
 
 def showargs(args):
-    print '<html><head></head><body>'
+    print('<html><head></head><body>')
     keys = args.keys()
     keys.sort()
     for key in keys:
         print('{}: {}<br/>'.format(key, args[key]))
-    print '</body></html>'
+    print('</body></html>')
 
 def check_session(uid, pwd):
     if uid and pwd:
@@ -48,7 +43,7 @@ def check_session(uid, pwd):
     else:
         access, m = 0, "Geen usernaam ({}) en/of sessie-id ({}) meegegeven".format(
             uid, pwd)
-    return access , m
+    return access, m
 
 class MeldFout(object):
     """Foutmelding opmaken en printen

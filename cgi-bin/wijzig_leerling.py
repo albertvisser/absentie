@@ -1,4 +1,6 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import cgi
 import cgitb
 cgitb.enable()
@@ -8,8 +10,7 @@ from leerling_main import WijzigLeerling
 def main():
     form = cgi.FieldStorage()
     form_ok = False
-    u = ''
-    s = ''
+    u = s = ''
     for k in form.keys():
         if k.startswith('wll1'):
             u = form[k].value
@@ -30,23 +31,24 @@ def main():
         if not sel_id or not vn or not an or not jr \
                 or not gesl or not aut or not grp:
             meld = "Alle rubrieken moeten worden ingevuld"
-    print "Content-Type: text/html"     # HTML is following
+    print("Content-Type: text/html")     # HTML is following
     if meld:
         l = shared.MeldFout("Er is iets misgegaan", meld)
-        print
+        print()
         for x in h.regels:
-            print x
+            print(x)
         return
     naam = (vn, vv, an)
     datum = (dd, mm, jr)
     ok = wijzig_leerling(sel_id, naam, datum, gesl, aut, grp)
     if ok:
         # doorlinken naar selectiescherm
-        print ('Location: http://school.pythoneer.nl/cgi-bin/toon_leerlingen.py?tll1=%s&tll2=%s' % (u,s))
-        print
+        print('Location: http://school.pythoneer.nl/cgi-bin/toon_leerlingen.py?'
+            'tll1=%s&tll2=%s' % (u,s))
+        print()
     else:
-        print
-        print "Wijzigen is niet gelukt"
+        print()
+        print("Wijzigen is niet gelukt")
 
 if __name__ == '__main__':
     main()

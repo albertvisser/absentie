@@ -1,4 +1,6 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import cgi
 import cgitb
 cgitb.enable()
@@ -40,26 +42,26 @@ def main():
                 meld = "opgegeven user niet gevonden"
             ## elif not ok:
                 ## meld = "toevoegen/wijzigen is niet gelukt"
-    print "Content-Type: text/html"     # HTML is following
+    print("Content-Type: text/html")     # HTML is following
     if meld:
         l = shared.MeldFout("Er is iets misgegaan", meld)
-        print
+        print()
         for x in l.regels:
-            print x
+            print(x)
     else:
         if doe == "J":
-            print
+            print()
             for x in p.regels:
-                print x
+                print(x)
         else:
             # doorlinken naar selectiescherm
             # hier moet nog userid en sessionid aan doorgegeven worden
             # van = toon_users: tu1 en tu2
             # andere mogelijkheid: nog niet aanwezig (login pagina?)
             if van == 'toon_users':
-                print ('Location: http://school.pythoneer.nl/cgi-bin/%s.py?'
+                print('Location: http://school.pythoneer.nl/cgi-bin/%s.py?'
                     'tu1=%s&tu2=%s' % (van, u, s))
-            print
+            print()
 
 if __name__ == '__main__':
     main()

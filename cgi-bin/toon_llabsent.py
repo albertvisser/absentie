@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 import cgi
 import cgitb
 cgitb.enable()
@@ -21,10 +21,9 @@ def main():
         sel_id = form.getfirst("hId", 0)
         meld = form.getfirst("txtMeld", "")
         h = ToonAbsentie(u, sel_id, meld, vandaan)
-    print "Content-Type: text/html"     # HTML is following
-    print                               # blank line, end of headers
+    print("Content-Type: text/html\n")     # HTML is following
     for x in h.regels:
-      print x
+      print(x)
 
 if __name__ == '__main__':
     main()

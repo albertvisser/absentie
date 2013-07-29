@@ -1,4 +1,6 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import cgi
 import cgitb
 cgitb.enable()
@@ -10,8 +12,7 @@ def main():
     form_ok = False
     ## shared.showkeys(form)
     ## return
-    u = ''
-    s = ''
+    u = s = ''
     for k in form.keys():
         if k.startswith('wla1'):
             u = form.getvalue(k)
@@ -52,10 +53,9 @@ def main():
 
             h = WijzigAbsentie(sel_id, newstat, reden, komtvan, u, s,
                 kwamvan, newdat, enddat)
-    print "Content-Type: text/html"     # HTML is following
-    print
+    print("Content-Type: text/html\n")     # HTML is following
     for x in h.regels:
-        print x
+        print(x)
 
 if __name__ == '__main__':
     main()

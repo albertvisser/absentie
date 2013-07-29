@@ -1,4 +1,6 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import cgi
 import cgitb
 cgitb.enable()
@@ -17,10 +19,9 @@ def main():
         l = ToonAbsenten(u, xslevel)
         #~ m = ('gebruiker %s heeft toegangsniveau %s' % (u,xslevel))
         #~ l = meld_fout("Er is iets misgegaan",m)
-    print "Content-Type: text/html"     # HTML is following
-    print
+    print("Content-Type: text/html\n")     # HTML is following
     for x in l.regels:
-      print x
+      print(x)
 
 if __name__ == '__main__':
     main()

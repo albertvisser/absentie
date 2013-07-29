@@ -1,4 +1,6 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import cgi
 import cgitb
 cgitb.enable()
@@ -15,11 +17,10 @@ def main():
     paswd = form.getfirst("txtPass", "")
     regels, cregels = do_login(user, paswd)
     for x in cregels:
-        print x
-    print "Content-Type: text/html"     # HTML is following
-    print
+        print(x)
+    print("Content-Type: text/html\n")     # HTML is following
     for x in regels:
-        print x
+        print(x)
 
 if __name__ == "__main__":
     main()
