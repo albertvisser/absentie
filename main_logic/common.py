@@ -101,11 +101,14 @@ def printkop(t, u="", vandaan=""): # u is user voor in melding
                         elif vs[0] == 'toon_absent':
                             h = "doit('ta1','ta2')"
                             l.append(absentformtext % (cgipad, h))
-                    elif t == 'Gezocht op: naam(deel)':
+                    elif t.startswith('Gezocht op: naam(deel)'):
                         vs = vandaan.split("-")
                         if vs[0] == 'toon_klas':
                             h = "doit('tk1','tk2')"
                             l.append(klasformtext % (cgipad, vs[1], h))
+                        elif vs[0] == 'toon_absent':
+                            h = "doit('ta1','ta2')"
+                            l.append(absentformtext % (cgipad, h))
                     if t != "Startscherm":
                         h = "doit('tb1','tb2')"
                         l.append(startformtext % (cgipad, h))

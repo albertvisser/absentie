@@ -77,8 +77,8 @@ class ToonGroep(object):
                         if edit_entry and sel_id == "0":
                             self.wijzigregel("0", u, s)
                         h = self.groepen.keys()
-                        h.sort()
-                        for y in h:
+                        ## h.sort()
+                        for y in sorted(h):
                             if edit_entry and y == sel_id:
                                 self.wijzigregel(y, u, s)
                             else:

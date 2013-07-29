@@ -46,9 +46,9 @@ toonform = '      <form action="%stoon_llabsent.py" method="post">'
 no_result = '    <tr><td colspan="3">Geen gegevens gevonden</td></tr>'
 
 class SelectLeerling:
-  def __init__(self, zoek, vandaan, u, s, xslevel):
+  def __init__(self, zoek, vandaan, u, s, xslevel, in_absenten):
     self.regels = []
-    self.lijst = zoek_leerlingen(zoek, vandaan)
+    self.lijst = zoek_leerlingen(zoek, vandaan, in_absenten)
     if len(self.lijst) == 1:
         self.regels.append(gotonext % ('fThis', common.cgipad, self.lijst[0][0],
             zoek, u, s))
@@ -57,23 +57,50 @@ class SelectLeerling:
     with open(os.path.join(common.filepad, "toon_klas.html")) as fh:
         for x in fh.readlines():
             x = x.rstrip()
-            if "%s" in x:
+            if "hVan" in x:
+                self.regels.append(x % vandaan)
+            elif "%s" in x:
                 if "stylesheet" in x:
                     self.regels.append(x % common.httppad)
                 elif "<script" in x:
                     self.regels.extend(common.get_script())
                 elif "action" in x:
                     self.regels.append(x % common.cgipad)
+                elif 'chkAbs' in x:
+                    hlp = ''
+                    if in_absenten or vandaan == 'toon_absent':
+                        hlp += 'checked="checked"'
+                    if vandaan == 'toon_absent':
+                        hlp += 'disabled="disabled"'
+                    if hlp:
+                        self.regels.append(x % hlp)
+                    else:
+                        self.regels.append(x)
                 elif "option" in x:
                     for _id, naam in groepenlijst()[0]:
                         self.regels.append(x % (_id, naam))
-            elif zoek != "" and '<input type="submit" value="Zoek"' in x:
-                self.regels.append(disabled_button.format('Zoek'))
+            ## elif zoek != "" and '<input type="submit" value="Zoek"' in x:
+                ## self.regels.append(disabled_button.format('Zoek'))
             elif "<!-- kop -->" in x:
-                self.regels.extend(common.printkop('Gezocht op: naam(deel)', u,
+                t = ''
+                if zoek:
+                    t += 'naam(deel) '
+                if vandaan.startswith('toon_klas'):
+                    ## leerk_id = vandaan.split('_')[1]
+                    if in_absenten:
+                        if t:
+                            t += 'en '
+                        t += "absent"
+                    t += " binnen groep van " + u # str(Leerkracht(leerk_id).naam)
+                elif vandaan == 'toon_absent':
+                    t += " binnen absenten"
+                self.regels.extend(common.printkop('Gezocht op: ' + t, u,
                     vandaan))
-            elif "txtZoek" in x and zoek != "":
-                self.regels.append(x.replace( "/>", ' value="%s"/>' % zoek))
+            elif "txtZoek" in x:
+                if zoek:
+                    self.regels.append(x.replace( "/>", ' value="%s"/>' % zoek))
+                else:
+                    self.regels.append(x)
             elif "<!-- contents -->" in x:
                 for key, item, text, _, _ in self.lijst:
                     self.regels.append(row)
@@ -151,8 +178,8 @@ class ToonLeerling(object):
                             self.wijzigregel("0", u, s)
                         h = leerlingenlijst()[0].keys()
                         #-- dit is het punt waarop de sortering kan worden aangepast
-                        h.sort()
-                        for y in h:
+                        ## h.sort()
+                        for y in sorted(h):
                             if edit_entry:
                                 if y == sel_id:
                                     self.wijzigregel(y, u, s)
@@ -235,8 +262,10 @@ class ToonLeerling(object):
         self.regels.append(endform)
         self.regels.append(endrow)
 
-def wijzig_leerling(id_, (vn, vv, an), (dd, mm, jr), gesl, aut, grp):
+def wijzig_leerling(id_, naam, geboren, gesl, aut, grp):
     ok = wijzigen = False
+    vn, vv, an = naam
+    dd, mm, jr = geboren
     ll = Leerling(id_)
     ll.read()
     if not ll.found:

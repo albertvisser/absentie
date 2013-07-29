@@ -4,10 +4,13 @@ import common
 from Edex_objects import leerkrachtenlijst
 
 import common
-from Cookie import SimpleCookie, _getdate
+if sys.version < '3':
+    from Cookie import SimpleCookie, _getdate
+else:
+    from http.cookies import SimpleCookie, _getdate
 from school_user import User
 from klas_main import ToonKlas
-from select_leerling_main import SelectLeerling
+from leerling_main import SelectLeerling
 from absentie_main import ToonAbsenten
 okmelding = 'Het wachtwoord dat u heeft ingevuld is correct.<br /><br />' \
             'U bent nu aangelogd'

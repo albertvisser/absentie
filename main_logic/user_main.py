@@ -71,7 +71,7 @@ class ToonUser(object):
                     else:
                         self.regels.append(x)
 
-    def toonregel(self,x,edit_entry):
+    def toonregel(self, x, edit_entry):
         self.regels.append(row)
         self.regels.append(coltext % x[0])
         self.regels.append(coltext % common.xtypes[x[2]])

@@ -38,12 +38,14 @@ class ToonKlas:
                 elif "action" in x:
                     self.regels.append(x % common.cgipad)
                 elif "hVan" in x:
-                    self.regels.append(x % sel_id)
+                    self.regels.append(x % ('toon_klas-' + str(sel_id)))
+                elif 'chkAbs' in x:
+                    self.regels.append(x)
                 elif "option" in x:
                     for g in groep:
                         self.regels.append(x % (g, g))
             elif "<!-- kop -->" in x:
-                self.regels.extend(common.printkop("Gezocht op: groep ", u))
+                self.regels.extend(common.printkop("Gezocht op: groep van %s" % u, u))
             elif "<!-- contents -->" in x:
                 lknm = leerk.naam.voornaam     # voornaam van de leerkracht bij de gevraagde klas/groep
                 for key, data in klas.items():

@@ -46,7 +46,7 @@ class ToonAbsenten(object):
     abs = absentenlijst()
     ll = leerlingenlijst()[0]
     gr = groependetailslijst()[0]
-    with open(os.path.join(common.filepad, "toon_absent.html")) as fh:
+    with open(os.path.join(common.filepad, "toon_klas.html")) as fh:
         for x in fh:
             x = x.rstrip()
             if "%s" in x:
@@ -57,7 +57,9 @@ class ToonAbsenten(object):
                 elif "action" in x:
                     self.regels.append(x % common.cgipad)
                 elif "hVan" in x:
-                    self.regels.append(x % sel_id)
+                    self.regels.append(x % 'toon_absent')
+                elif 'chkAbs' in x:
+                    self.regels.append(x % 'checked="checked" disabled="disabled"')
                 elif "option" in x:
                     for g in groep:
                         self.regels.append(x % (g, g))
@@ -166,6 +168,21 @@ class ToonAbsentie(object):
                     for i in range(dmy.year - 1, dmy.year + 2):
                         y = selected_text if i == dmy.year else ''
                         self.regels.append(option % (y, i, i))
+                elif "eindDag" in x:
+                    self.regels.append(x)
+                    self.regels.append(option % (selected_text, 0, '- -'))
+                    for i in range(1,32):
+                        self.regels.append(option % ('', i, i))
+                elif "eindMnd" in x:
+                    self.regels.append(x)
+                    self.regels.append(option % (selected_text, 0, '- -'))
+                    for i in range(1,13):
+                        self.regels.append(option % ('', i, i))
+                elif "eindJaar"  in x:
+                    self.regels.append(x)
+                    self.regels.append(option % (selected_text, 0, '- - - -'))
+                    for i in range(dmy.year - 1, dmy.year + 2):
+                        self.regels.append(option % ('', i, i))
                 elif "<!-- AbsentHist -->" in x:
                     self.regels.append(header)
                     for x in absenties(sel_id):
@@ -181,7 +198,8 @@ class ToonAbsentie(object):
 htmlbegin = '<html><head></head><body onload="document.getElementById(%s).submit()">'
 htmleind = '</form></body></html>'
 class WijzigAbsentie(object):
-    def __init__(self, sel_id, newstat, reden, komt_van, u, s, kwam_van, newdata=""):
+    def __init__(self, sel_id, newstat, reden, komt_van, u, s, kwam_van, newdata="",
+            enddat=""):
         self.fout = ""
         if sel_id == "0":
             self.fout = "U moet wel een sleutelwaarde opgeven"
@@ -215,12 +233,15 @@ class WijzigAbsentie(object):
         if self.fout == "":
             ll = Leerling(sel_id)
             h = time.localtime()
-            if newdata != "":
-                dt = '-'.join((newdata[6:],newdata[4:6],newdata[:4]))
+            if newdata:
+                dt = '-'.join((newdata[:4],newdata[4:6],newdata[6:]))
             else:
-                dt = '%02i-%02i-%04i'% (h[2], h[1], h[0])
+                dt = '%02i-%02i-%04i'% (h[0], h[1], h[2])
             dt += ";%02i:%02i:%02i" % (h[3],h[4],h[5])
             ll.add_absentie(newstat, reden, dt)
+            if enddat:
+                dt = '-'.join((enddat[:4],enddat[4:6],enddat[6:])) + ";00;00;00"
+                ll.add_absentie("0", "", dt)
 
         self.regels = []
         self.regels.append(htmlbegin % "'fThis'")
