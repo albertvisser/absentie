@@ -170,9 +170,9 @@ def userlijst():
     dh = ListUsers()
     parser.setContentHandler(dh)
     parser.parse(userfile)
-    for x in dh.items:
-        items.append([y.encode('ISO-8859-1') for y in x])
-    return items
+    ## for x in dh.items:
+        ## items.append([y.encode('ISO-8859-1') for y in x])
+    return dh.items
 
 class User:
     """gegevens van een bepaalde user

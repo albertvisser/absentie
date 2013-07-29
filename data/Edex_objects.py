@@ -3,6 +3,7 @@
 
 import os
 import shutil
+import datetime
 from globals import filepad
 _leerkrachtenfile = os.path.join(filepad, "EdexLKw.txt")
 _leerkrachtgroepenfile = os.path.join(filepad, "EdexLGw.txt")
@@ -90,7 +91,7 @@ def leerkrachtenlijst():
     "Opbouwen lijst met leerkrachten (alleen voornaam) en hun id's"
     laatste = ""
     lijst = []
-    with open(_leerkrachtenfile) as fh:
+    with open(_leerkrachtenfile, encoding='utf-8') as fh:
         for x in fh:
             x = x.strip()
             if x == '':
@@ -112,7 +113,7 @@ class Leerkracht(object):
         self.read()
 
     def read(self):
-        with open(self._fn) as fh:
+        with open(self._fn, encoding='utf-8') as fh:
             for x in fh:
                 if x[70:75] == self.id:
                     self.found = True
@@ -120,11 +121,11 @@ class Leerkracht(object):
         if self.found:
             self.naam = Naamobj(x[0:70])
             self.groep = {}
-            with open(_leerkrachtgroepenfile) as fh:
+            with open(_leerkrachtgroepenfile, encoding='utf-8') as fh:
                 for x in fh:
                     if x[0:5] == self.id:
                         self.groep[x[5:10]] = ""
-            with open(_groepenfile) as fh:
+            with open(_groepenfile, encoding='utf-8') as fh:
                 for x in fh:
                     grpid = x[31:36]
                     if grpid in self.groep:
@@ -139,28 +140,28 @@ class Leerkracht(object):
         s = ("%-40s%-10s%-20s%s    1\n" % (self.naam.achternaam,
             self.naam.voorvoegsel, self.naam.voornaam, self.id))
         if self.found:
-            with open(self._fn,"w") as fh, open(fno) as fho:
+            with open(self._fn, "w") as fh, open(fno, encoding='utf-8') as fho:
                 for x in fho:
                     if x[70:75] == self.id:
                         fh.write(s)
                     else:
                         fh.write(x)
         else:
-            with open(self._fn, "a") as fh:
+            with open(self._fn, "a", encoding='utf-8') as fh:
                 fh.write(s)
         return True
 
 def groepenlijst(): # was lijstGR0
     "lijst met alleen id en naam"
     lijst = []
-    with open(_groepenfile) as fh:
+    with open(_groepenfile, encoding='utf-8') as fh:
         lijst = [(x[:30].strip(), x[31:36]) for x in fh]
     return lijst
 
 def groependetailslijst(): # was lijstGR
     laatste = ""
     y = {}
-    with open(_leerkrachtgroepenfile) as fh:
+    with open(_leerkrachtgroepenfile, encoding='utf-8') as fh:
         for x in fh:
             leerk_id = x[:5]
             grp_id = x[5:10]
@@ -169,7 +170,7 @@ def groependetailslijst(): # was lijstGR
                     y[grp_id] = (naam, _id)
                     break
     lijst = {}                 # groepsgegevens opbouwen
-    with open(_groepenfile) as fh:
+    with open(_groepenfile, encoding='utf-8') as fh:
         for x in fh:
             if x.rstrip() == '':
                 continue
@@ -201,7 +202,7 @@ class Groep(object):
         fn = _groepenfile
         fno = fn + ".bak"
         shutil.copyfile(fn, fno)
-        with open(fn, "w") as fh, open(fno) as fho:
+        with open(fn, "w") as fh, open(fno, encoding='utf-8') as fho:
             gevonden = False
             for x in fho:
                 key = x[31:36]    # groepsid
@@ -215,7 +216,7 @@ class Groep(object):
                 x = self.naam.ljust(30) + str(self.jaar) + self.id
                 fh.write("\n" + x)
         fn = _leerkrachtgroepenfile
-        with open(fn) as fh:
+        with open(fn, encoding='utf-8') as fh:
             data = fn.readlines()
         gewijzigd = False
         for ix, x in enumerate(data):
@@ -258,7 +259,7 @@ def leerlingenlijst(leerkracht=None, groep=None):
         groepen = leerk.groep.keys()
     elif groep is not None:
         groepen = (groep,)
-    with open(_leerlingenfile) as fh:
+    with open(_leerlingenfile, encoding='utf-8') as fh:
         for x in fh:
             grp_id = x[85:90]
             naam = Naamobj(x[0:70])
@@ -271,25 +272,33 @@ def leerlingenlijst(leerkracht=None, groep=None):
 
 def absentenlijst():
     lijst = {}
+    leerl_id = vorig_leerlid = ''
+    comparedate = datetime.datetime.today().strftime('%Y-%m-%d;%H:%M:%S')
     if not os.path.exists(_absentenfile):
         return lijst
-    with open(_absentenfile) as fh:
+    with open(_absentenfile, encoding='utf-8') as fh:
         for x in fh:
+            if leerl_id:
+                vorig_leerlid = leerl_id
             leerl_id = x[0:5]
-            if leerl_id in lijst:
-                continue # eerdere absenties overslaan
-            else:
-                datum = x[5:24]
-                reden = x[24]
-                oms = x[25:].strip()
-                lijst[leerl_id] = (reden, oms, datum)
+            if leerl_id != vorig_leerlid:
+                found_leerl = False
+            elif found_leerl:
+                continue
+            datum = x[5:24]
+            reden = x[24]
+            oms = x[25:].strip()
+            if datum <= comparedate:
+                if reden != '0':
+                    lijst[leerl_id] = (reden, oms, datum)
+                found_leerl = True
     return lijst
 
 def absenties(leerl_id):
     lijst = []
     if not os.path.exists(_absentenfile):
         return lijst
-    with open(_absentenfile) as fh:
+    with open(_absentenfile, encoding='utf-8') as fh:
         for x in fh:
             leerl = x[0:5]
             if leerl == leerl_id:
@@ -299,30 +308,35 @@ def absenties(leerl_id):
                 lijst.append((datum, reden, oms))
     return lijst
 
-def zoek_leerlingen(zoek, van):
+def zoek_leerlingen(zoek, van, in_absenten):
     h = van.split("-")
-    if len(h) == 1:
-        ingrp = []
-    elif len(h) == 2:               # komt van scherm met leerkrachtnummer
+    selgrp = []
+    selabs = []
+    if len(h) == 1 or in_absenten: # komt van scherm met absenten
+        selabs = absentenlijst()
+    if len(h) == 2:               # komt van scherm met leerkrachtnummer
         van, bij = h
         if van == "toon_klas":
             lh = Leerkracht(bij)
-            ingrp = lh.groep
+            selgrp = lh.groep
     groepen, _ = groependetailslijst()
     lijst = []
-    with open(_leerlingenfile) as fh:
+    with open(_leerlingenfile, encoding='utf-8') as fh:
         for x in fh:
             naam = x[0:70]
-            if zoek.upper() in naam.upper():
-                leerl_naam = str(Naamobj(x[0:70]))
-                leerl_id = x[80:85]
-                leerl_grp = x[85:90]
-                ## insel = 1
-                ## llgr = gh.groep[x[85:90]].lknm # of .lkid
-                if not ingrp or leerl_grp in ingrp:
-                    grp_naam, grp_jaar, leerk = groepen[leerl_grp]
-                    lijst.append((leerl_id, leerl_naam, leerl_grp, grp_naam,
-                        grp_jaar))
+            if zoek and zoek.upper() not in naam.upper():
+                continue
+            leerl_naam = str(Naamobj(x[0:70]))
+            leerl_id = x[80:85]
+            if selabs and leerl_id not in selabs:
+                continue
+            leerl_grp = x[85:90]
+            if selgrp and leerl_grp not in selgrp:
+                continue
+            grp_naam, grp_jaar, leerk = groepen[leerl_grp]
+            lijst.append((leerl_id, leerl_naam, leerk[0], grp_naam,
+                grp_jaar))
+
     return lijst
 
 class Leerling:
@@ -336,7 +350,7 @@ class Leerling:
         self.read()
 
     def read(self):
-        with open(_leerlingenfile) as fh:
+        with open(_leerlingenfile, encoding='utf-8') as fh:
             for x in fh:
                 if x[80:85] == self._id:
                     self.found = True
@@ -357,7 +371,10 @@ class Leerling:
     def laatste_absentie(self):
         self.get_absenties()
         if self.absenties:
-            return self.absenties[0]
+            comparedate = datetime.datetime.today().strftime('%Y-%m-%d;%H:%M:%S')
+            for abs in self.absenties:
+                if abs[0] <= comparedate:
+                    return abs
 
     def add_absentie(self, code, reden, datetime):
         "absentie updaten"
@@ -369,20 +386,26 @@ class Leerling:
         lines = []
         i = 0
         regel = ""
-        replace = False
         if os.path.exists(fn):
             shutil.copyfile(fn,fno)
-            with open(fno) as fh:
-                lines = fh.readlines()
-                fh.close()
-            for ix, line in enumerate(lines):
-                if line[24:] == newline[24:]:
-                    replace = True
-                    lines[ix] = newline
-        if not replace:
-            lines.insert(0,newline)
-        with open(fn, "w") as fh:
-            fh.writelines(lines)
+            with open(fno, encoding='utf-8') as f_in, open(fn, "w") as f_out:
+                written = False
+                for line in f_in:
+                    write_old = True
+                    write_new = False
+                    if newline[:5] > line[:5]:
+                        write_new = True
+                    elif newline[:5] == line[:5]:
+                        if newline[5:24] > line[5:24]:
+                            write_new = True
+                        elif newline[5:24] == line[5:24]:
+                            write_new = True
+                            write_old = False
+                    if write_new and not written:
+                        f_out.write(newline)
+                        written = True
+                    if write_old:
+                        f_out.write(line)
 
     def wijzig(self, naam, waarde, dmj="dmj"):
         if naam in ["vn","vv","an"]:
@@ -397,13 +420,13 @@ class Leerling:
         s = (self.naam.get_out("atv") + self.geboren.get_out("dmj") +
             self.geslacht + self.herkomst + self.leerl_id + self.groep)
         if self.found:
-            with open(fn, "w") as fh, open(fno) as fho:
+            with open(fn, "w") as fh, open(fno, encoding='utf-8') as fho:
                 for x in fho:
                     if x[80:85] == self.leerl_id:
                         fh.write("%s\n" % s)
                     else:
                         fh.write(x)
         else:
-            with open(fn,"a") as fh:
+            with open(fn, "a", encoding='utf-8') as fh:
                 fh.write("\n%s" % s)
         return True
