@@ -53,10 +53,10 @@ class UpdateUser(XMLGenerator):
     def __init__(self, user):
         self.uh = user
         self.search_item = self.uh.userid
-        self.fh = open(self.uh.fn,'w')
+        self._out = open(self.uh.fn, 'w')
         self.founditem = False
         self.itemfound = False
-        XMLGenerator.__init__(self, self.fh)
+        XMLGenerator.__init__(self, self._out)
         self.utype = 'usr'
         self.blck = 'N'
         self.start = 'start'
@@ -145,7 +145,7 @@ class UpdateUser(XMLGenerator):
 
     def endDocument(self):
 ##        XMLGenerator.endDocument(self)
-        self.fh.close()
+        self._out.close()
 
 
 class ListUsers(ContentHandler):
@@ -183,7 +183,7 @@ class User:
     c. usernaam en sessie: doe een read en controleer de sessie
        als het ok is de overige gegevens ophalen
     """
-    def __init__(self, userid, paswd="",is_sessionid=False): # user aanmaken
+    def __init__(self, userid, paswd="", is_sessionid=False): # user aanmaken
         self.fn = userfile
         self.fno = backup
         self.userid = userid

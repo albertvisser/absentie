@@ -312,9 +312,11 @@ def zoek_leerlingen(zoek, van, in_absenten):
     h = van.split("-")
     selgrp = []
     selabs = []
-    if len(h) == 1 or in_absenten: # komt van scherm met absenten
+    if van == 'start':
+        selabs = leerlingenlijst()[0]
+    elif len(h) == 1 or in_absenten: # komt van scherm met absenten
         selabs = absentenlijst()
-    if len(h) == 2:               # komt van scherm met leerkrachtnummer
+    elif len(h) == 2:               # komt van scherm met leerkrachtnummer
         van, bij = h
         if van == "toon_klas":
             lh = Leerkracht(bij)

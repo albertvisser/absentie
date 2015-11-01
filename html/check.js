@@ -40,7 +40,8 @@ function doit(naam1,naam2) {
 function doit_sel(naam1,naam2,naam3) {
     var fout = '';
     var v = document.getElementById(naam1);
-    if (v.value == '') {
+    var w = document.getElementById("chkAbs");
+    if (v.value == '' && w.checked == false) {
         fout = 'U moet wel invullen waar u naar zoeken wilt';
         alert(fout);
         v.focus();
@@ -179,11 +180,11 @@ function check_llabs() {
 function isDateOK() {
     var d=0,m=0,j=0,err='';
     var x = document.getElementById('selDag');
-    d = x.options[x.selectedIndex].index;
+    d = x.options[x.selectedIndex].index + 1;
     x = document.getElementById('selMnd');
-    m = x.options[x.selectedIndex].index;
+    m = x.options[x.selectedIndex].index + 1;
     x = document.getElementById('selJaar');
-    j = x.options[x.selectedIndex].index;
+    j = x.options[x.selectedIndex].index + 1;
     if ((m==4||m==6||m==9||m==11) && (d==31))
         err='fout';
     else
@@ -194,6 +195,36 @@ function isDateOK() {
                 err='fout';
     if (err)
         alert('Foute datum');
+    else
+        isChanged();
+    document.MM_returnValue = (err == '');
+}
+function isEnddatOK() {
+    // alle indexen zijn 1 hoger omdat hier ook een waarde 'niet van toepassing' mogelijk is
+    var d=0,m=0,j=0,err='';
+    var x = document.getElementById('eindDag');
+    d = x.options[x.selectedIndex].index;
+    x = document.getElementById('eindMnd');
+    m = x.options[x.selectedIndex].index;
+    x = document.getElementById('eindJaar');
+    j = x.options[x.selectedIndex].index;
+    if ((d==0&&(m!=0||j!=0))||(m==0&&(d!=0||j!=0))||(j==0&&(d!=0||m!=0)))
+        err='nietleeg';
+    else
+        if ((m==4||m==6||m==9||m==11) && (d==31))
+            err='fout';
+        else
+            if ((m==2)&&(d>29))
+                err='fout';
+            else
+                if ((m==2)&&(d>28)&&(j!=4*floor(j/4)))
+                    err='fout';
+    if (err) {
+        tekst = 'Foute datum';
+        if (err!='fout')
+            tekst += ' (niet leeg)';
+        alert(tekst);
+        }
     else
         isChanged();
     document.MM_returnValue = (err == '');
