@@ -1,8 +1,9 @@
 import os
 import sys
 from time import localtime
-filepad = '/home/albert/www/lemoncurry/absentie' # waar de html staat
-sys.path.append(os.path.join(os.path.dirname(__file__), "data"))
+filepad = '../html' # was '/home/albert/www/lemoncurry/absentie' # waar de html staat
+## sys.path.append(os.path.join(os.path.dirname(__file__), "data"))
+sys.path.append("../dml")
 httppad = "http://absentie.lemoncurry.nl/"
 cgipad = httppad + "cgi-bin/"
 afwstat = ["aanwezig", "afwezig,  reden onbekend", "afwezig met reden", "ziek",

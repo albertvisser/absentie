@@ -3,12 +3,13 @@
 import sys
 import os
 import cgi
-sys.path.append("/home/albert/pythoneer/absentie") # waar de eigenlijke programmatuur staat
+## sys.path.append("/home/albert/pythoneer/absentie") # waar de eigenlijke programmatuur staat
+sys.path.append("../main_logic") # waar de eigenlijke programmatuur staat
 from user_main import check_login
 from common import httppad, cgipad, printkop
-wwwroot = '/home/albert/www/'
-filepad = wwwroot + 'pythoneer/absentie'
-cgifilepad = wwwroot + "cgi-bin/absentie"
+## wwwroot = '/home/albert/www/'
+filepad = '../html' # was wwwroot + 'pythoneer/absentie'
+cgifilepad = os.path.dirname(__file__) # was wwwroot + "cgi-bin/absentie"
 
 def showkeys(form):
     print("Content-Type: text/html\n")     # HTML is following
