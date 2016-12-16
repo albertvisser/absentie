@@ -3,7 +3,7 @@ Files in this directory
 
 cgi-bin
 -------
-    cgi responses
+    cgi scripts
 
     school_login.py
         opbouwen login pagina

@@ -6,6 +6,7 @@ syntax: glob
 *pyc
 *log
 *txt
+*xml
 *ini
 pylint*
 archive.zip
