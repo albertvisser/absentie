@@ -5,7 +5,7 @@ import cgi
 import cgitb
 cgitb.enable()
 import shared
-from leerling_main import WijzigLeerling
+from leerling_main import wijzig_leerling
 
 def main():
     form = cgi.FieldStorage()
@@ -33,7 +33,7 @@ def main():
             meld = "Alle rubrieken moeten worden ingevuld"
     print("Content-Type: text/html")     # HTML is following
     if meld:
-        l = shared.MeldFout("Er is iets misgegaan", meld)
+        h = shared.MeldFout("Er is iets misgegaan", meld)
         print()
         for x in h.regels:
             print(x)

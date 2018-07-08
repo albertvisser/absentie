@@ -8,6 +8,7 @@ from absentie_main import ToonAbsentie
 def main():
     form = cgi.FieldStorage()
     form_ok = False
+    u = s = ''
     for k in form.keys():
         if k.startswith('tla1'):
             u = form.getfirst(k, '')
@@ -15,7 +16,7 @@ def main():
             s = form.getfirst(k, '')
     xslevel, meld = shared.check_session(u, s)
     if meld:
-        l = shared.MeldFout("Er is iets misgegaan", meld)
+        h = shared.MeldFout("Er is iets misgegaan", meld)
     else:
         vandaan = form.getfirst("hVan", 'start')
         sel_id = form.getfirst("hId", 0)

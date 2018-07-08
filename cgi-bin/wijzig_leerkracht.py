@@ -5,7 +5,7 @@ import cgi
 import cgitb
 cgitb.enable()
 import shared
-from leerkracht_main import WijzigLeerkracht
+from leerkracht_main import wijzig_leerkracht
 
 def main():
     form = cgi.FieldStorage()
@@ -26,9 +26,9 @@ def main():
         an = form.getfirst("tanaam", '')
         if not sel_id or not vn or not an:
             meld = "Alle rubrieken moeten worden ingevuld"
-    print "Content-Type: text/html"     # HTML is following
+    print("Content-Type: text/html")    # HTML is following
     if meld:
-        l = shared.MeldFout("Er is iets misgegaan", meld)
+        h = shared.MeldFout("Er is iets misgegaan", meld)
         print()
         for x in h.regels:
             print(x)

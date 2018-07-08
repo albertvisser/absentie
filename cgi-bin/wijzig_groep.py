@@ -5,8 +5,7 @@ import cgi
 import cgitb
 cgitb.enable()
 import shared
-from groep_main import WijzigGroep
-from Edex_objects import GRgeg
+from groep_main import wijzig_groep
 
 def main():
     form = cgi.FieldStorage()
@@ -32,7 +31,7 @@ def main():
         for x in l.regels:
             print(x)
         return
-    ln = WijzigGroep(id, nm, jr, lk)
+    ln = wijzig_groep(id, nm, jr, lk)
     if ln.ok:
         # doorlinken naar selectiescherm
         print('Location: http://school.pythoneer.nl/cgi-bin/toon_groepen.py?'
