@@ -24,7 +24,7 @@ van daaruit verder te zoeken:
 
 -   toon alle absente leerlingen van dit moment
 
-Op alle slectieschermen kan gekozen worden om de status van een leerling direct aan
+Op alle selectieschermen kan gekozen worden om de status van een leerling direct aan
 te passen of de details van de leerling te laten zien (en aan te kunnen passen).
 
 Als de selectie maar één leerling als resultaat geeft worden de detailgegevens
@@ -43,8 +43,8 @@ gedaan van de volgende tabellen:
 
 -   leerkrachten
 -   leerlingen
--   groepen ((dit was gemaakt voor een Jenaplan school waar een leerkracht leerlingen uit
-meerdere leerjaren in de klas heeft))
+-   groepen (dit was gemaakt voor een Jenaplan school waar een leerkracht leerlingen 
+    uit meerdere leerjaren in de klas heeft)
 -   gebruikers
 
 Hiervoor wordt een scherm geopend met een overzicht van alle
