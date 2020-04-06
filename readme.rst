@@ -5,48 +5,21 @@ Webapp from 2003 for registering school absentees.
 
 Mainly here for showcasing.
 
-For data it uses text files that are exported from the school's pupil tracking
-application.
+It was meant for teachers to administer absentees from their classroom, and for others in the school to do so from their own workplace.
 
-Short description (in Dutch for now):
+Built in Python using plain CGI and a little JavaScript.
 
-Het startscherm toont een aantal mogelijkheden om een initiële selectie te maken en
-van daaruit verder te zoeken:
+For data it uses text files that are exported from the school's pupil tracking application. later I added a very crude system to support user login, at that time I used XML to store data.
 
--   Toon de leerlingen uit de groep(en) van een leerkracht
+for more info see https://www.magiokis.nl/docs/en/absenties/
 
-    resultaat: lijst met alle leerlingen uit alle groepen bij de gekozen leerkracht
+Usage
+-----
 
-    van hieruit kan de zoekactie nog verfijnd worden door op (deel van) de naam te
-    zoeken of direct een leerling te selecteren
+copy the contents of server-config-nginx or server-config-apache into your local webserver configuration and make it point to the right locations. Point your webbrowser to the specified domain.
 
--   Zoek een leerling op (deel van) de naam
+Requirements
+------------
 
--   toon alle absente leerlingen van dit moment
-
-Op alle selectieschermen kan gekozen worden om de status van een leerling direct aan
-te passen of de details van de leerling te laten zien (en aan te kunnen passen).
-
-Als de selectie maar één leerling als resultaat geeft worden de detailgegevens
-direct getoond.
-
-Op het detailscherm wordt de absentiegeschiedenis van een leerling getoond. Tevens
-is het volgende mogelijk:
-
--   absentiestatus van een leerling wijzigen
--   begin/einddatum van de absentie opgeven/aanpassen (bij wijzigen op een
-    selectiescherm wordt altijd de systeemdatum/tijd gebruikt)
--   absentiereden opgeven/toelichten (kan ook bij wijzigen op een selectiescherm?)
-
-Voor daartoe bevoegde gebruikers kan vanaf het startscherm tevens het beheer worden
-gedaan van de volgende tabellen:
-
--   leerkrachten
--   leerlingen
--   groepen (dit was gemaakt voor een Jenaplan school waar een leerkracht leerlingen 
-    uit meerdere leerjaren in de klas heeft)
--   gebruikers
-
-Hiervoor wordt een scherm geopend met een overzicht van alle
-regels van de betreffende tabel met de mogelijkheid ze te wijzigen of nieuwe regels
-op te voeren.
+- Python
+- some test programs use `logbook <https://pypi.org/project/Logbook>`_ 
